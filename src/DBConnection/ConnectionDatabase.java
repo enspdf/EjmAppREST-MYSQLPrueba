@@ -12,8 +12,9 @@ public class ConnectionDatabase {
 
 		try {
 			String connectionURL = "jdbc:mysql://localhost:3306/ws";
+			Connection connection = null;
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connection = DriverManager.getConnection(connectionURL, "root", "");
+			connection = DriverManager.getConnection(connectionURL, "root", "root");
 			return connection;
 		} catch (Exception e) {
 			throw e;

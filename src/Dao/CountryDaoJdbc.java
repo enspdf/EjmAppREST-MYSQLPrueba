@@ -10,6 +10,7 @@ import java.util.List;
 import Entities.City;
 import Entities.Country;
 import Entities.Department;
+import Entities.Entity;
 
 public class CountryDaoJdbc implements CountryDao {
 
@@ -34,6 +35,32 @@ public class CountryDaoJdbc implements CountryDao {
 			connection.close();
 		}
 		return countryList;
+	}
+	
+	@Override
+	public List<Entity> getCountryByName(Connection connection, Entity entity) throws SQLException {
+		List<Entity> EntitiesFiltered = new ArrayList<Entity>();
+		preparedStatement = connection.prepareStatement("SELECT * FROM country c INNER JOIN department d ON c.country_id = d.country_id INNER JOIN city ct ON d.department_id = ct.department_id WHERE c.country_name LIKE '%" + entity.getCountry().getCountry_name() + "%'");
+		try {
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Entity entityRes = new Entity();
+				entityRes.getCountry().setCountry_name(resultSet.getString("country_name"));
+				entityRes.getCountry().setCountry_id(resultSet.getInt("country_id"));
+				entityRes.getDepartment().setDepartment_name(resultSet.getString("department_name"));
+				entityRes.getDepartment().setCountry_id(resultSet.getInt("country_id"));
+				entityRes.getDepartment().setDepartment_id(resultSet.getInt("department_id"));
+				entityRes.getCity().setCity_name(resultSet.getString("city_name"));
+				entityRes.getCity().setCity_id(resultSet.getInt("city_id"));
+				entityRes.getCity().setDepartment_id(resultSet.getInt("department_id"));
+				EntitiesFiltered.add(entityRes);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			connection.close();
+		}
+		return EntitiesFiltered;
 	}
 
 	@Override
@@ -68,6 +95,16 @@ public class CountryDaoJdbc implements CountryDao {
 	@Override
 	public void saveCities(Connection connection, City city) throws SQLException {
 		int index = 1;
+		preparedStatement = connection.prepareStatement("INSERT INTO city (department_id, city_name) VALUES (?,?)");
+		preparedStatement.setInt(index++, city.getDepartment_id());
+		preparedStatement.setString(index++, city.getCity_name());
+		try {
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			connection.close();
+		}
 	}
 
 }

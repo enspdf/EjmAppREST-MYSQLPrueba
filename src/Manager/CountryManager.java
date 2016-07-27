@@ -1,11 +1,12 @@
 package Manager;
 
-import java.util.List;
+import java.util.List;import javax.jws.soap.SOAPBinding.Use;
 
 import Entities.City;
 import Entities.Country;
 import Entities.Department;
 import Entities.Entity;
+import Entities.User;
 
 public interface CountryManager {
 
@@ -20,5 +21,7 @@ public interface CountryManager {
 	void saveDepartments(Department department) throws Exception;
 
 	void saveCities(City city) throws Exception;
+	
+	void saveUser(User user) throws Exception;
 
 }

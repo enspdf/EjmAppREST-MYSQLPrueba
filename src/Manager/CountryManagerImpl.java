@@ -10,6 +10,7 @@ import Entities.City;
 import Entities.Country;
 import Entities.Department;
 import Entities.Entity;
+import Entities.User;
 
 public class CountryManagerImpl extends ConnectionDatabase implements CountryManager {
 
@@ -55,6 +56,12 @@ public class CountryManagerImpl extends ConnectionDatabase implements CountryMan
 	public void saveCities(City city) throws Exception {
 		Connection connection = this.getConnection();
 		Dao.saveCities(connection, city);
+	}
+	
+	@Override
+	public void saveUser(User user) throws Exception {
+		Connection connection = this.getConnection();
+		Dao.saveUser(connection, user);
 	}
 
 }

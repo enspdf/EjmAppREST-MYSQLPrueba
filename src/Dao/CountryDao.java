@@ -8,6 +8,7 @@ import Entities.City;
 import Entities.Country;
 import Entities.Department;
 import Entities.Entity;
+import Entities.User;
 
 public interface CountryDao {
 
@@ -22,5 +23,7 @@ public interface CountryDao {
 	void saveDepartments(Connection connection, Department department) throws SQLException;
 	
 	void saveCities(Connection connection, City city) throws SQLException;
+	
+	void saveUser(Connection connectin, User user) throws SQLException;
 
 }

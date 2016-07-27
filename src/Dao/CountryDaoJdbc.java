@@ -11,6 +11,7 @@ import Entities.City;
 import Entities.Country;
 import Entities.Department;
 import Entities.Entity;
+import Entities.User;
 
 public class CountryDaoJdbc implements CountryDao {
 
@@ -125,6 +126,21 @@ public class CountryDaoJdbc implements CountryDao {
 		preparedStatement = connection.prepareStatement("INSERT INTO city (department_id, city_name) VALUES (?,?)");
 		preparedStatement.setInt(index++, city.getDepartment_id());
 		preparedStatement.setString(index++, city.getCity_name());
+		try {
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			connection.close();
+		}
+	}
+	
+	@Override
+	public void saveUser(Connection connection, User user) throws SQLException {
+		int index = 1;
+		preparedStatement = connection.prepareStatement("INSERT INTO user (username, password) VALUES (?,?)");
+		preparedStatement.setString(index++, user.getUsername());
+		preparedStatement.setString(index++, user.getPassword());
 		try {
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {

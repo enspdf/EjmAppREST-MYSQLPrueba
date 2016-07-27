@@ -15,12 +15,15 @@ import Entities.City;
 import Entities.Country;
 import Entities.Department;
 import Entities.Entity;
+import Entities.User;
 import Manager.CountryManagerImpl;
+import Util.Crypter;
 
 @Path("api")
 public class CountryService {
 
 	CountryManagerImpl countryManager = new CountryManagerImpl();
+	Crypter crypto = new Crypter();
 
 	@GET
 	@Path("alldata")
@@ -38,6 +41,23 @@ public class CountryService {
 		List<Country> listCountries = countryManager.getAllCountries();
 		String countries = new JSONArray(listCountries).toString();
 		return Response.status(200).entity(countries).build();
+	}
+
+	@POST
+	@Path("register")
+	public Response registerUser(@FormParam("username") String username, @FormParam("password") String password)
+			throws Exception {
+		if (username == null || username.isEmpty())
+			return Response.status(400).entity("The username is required").build();
+		if (password == null || password.isEmpty())
+			return Response.status(400).entity("The password is required").build();
+		else {
+			User user = new User();
+			user.setUsername(username);
+			user.setPassword(crypto.crypto(password));
+			countryManager.saveUser(user);
+			return Response.status(201).entity("The user " + username + " was saved successfull").build();
+		}
 	}
 
 	@POST

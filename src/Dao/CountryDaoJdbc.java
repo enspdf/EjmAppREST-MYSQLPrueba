@@ -38,6 +38,33 @@ public class CountryDaoJdbc implements CountryDao {
 	}
 	
 	@Override
+	public List<Entity> getAll(Connection connection) throws SQLException {
+		List<Entity> allData = new ArrayList<Entity>();
+		preparedStatement = connection.prepareStatement("SELECT * FROM country c LEFT JOIN department d ON c.country_id = d.country_id LEFT JOIN city ct ON d.department_id = ct.department_id");
+		try {
+			resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				Entity entityRes = new Entity();
+				entityRes.getCountry().setCountry_name(resultSet.getString("country_name"));
+				entityRes.getCountry().setCountry_id(resultSet.getInt("country_id"));
+				entityRes.getDepartment().setDepartment_name(resultSet.getString("department_name"));
+				entityRes.getDepartment().setCountry_id(resultSet.getInt("country_id"));
+				entityRes.getDepartment().setDepartment_id(resultSet.getInt("department_id"));
+				entityRes.getCity().setCity_name(resultSet.getString("city_name"));
+				entityRes.getCity().setCity_id(resultSet.getInt("city_id"));
+				entityRes.getCity().setDepartment_id(resultSet.getInt("department_id"));
+				allData.add(entityRes);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			connection.close();
+		}
+		return allData;
+	}
+	
+	@Override
 	public List<Entity> getCountryByName(Connection connection, Entity entity) throws SQLException {
 		List<Entity> EntitiesFiltered = new ArrayList<Entity>();
 		preparedStatement = connection.prepareStatement("SELECT * FROM country c INNER JOIN department d ON c.country_id = d.country_id INNER JOIN city ct ON d.department_id = ct.department_id WHERE c.country_name LIKE '%" + entity.getCountry().getCountry_name() + "%'");

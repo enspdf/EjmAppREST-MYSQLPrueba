@@ -16,6 +16,14 @@ public class CountryManagerImpl extends ConnectionDatabase implements CountryMan
 	CountryDaoJdbc Dao = new CountryDaoJdbc();
 
 	@Override
+	public List<Entity> getAllData() throws Exception {
+		List<Entity> allData = new ArrayList<Entity>();
+		Connection connection = this.getConnection();
+		allData = Dao.getAll(connection);
+		return allData;
+	}
+
+	@Override
 	public List<Country> getAllCountries() throws Exception {
 		List<Country> countries = new ArrayList<Country>();
 		Connection connection = this.getConnection();

@@ -23,6 +23,15 @@ public class CountryService {
 	CountryManagerImpl countryManager = new CountryManagerImpl();
 
 	@GET
+	@Path("alldata")
+	@Produces("application/json")
+	public Response getAllData() throws Exception {
+		List<Entity> data = countryManager.getAllData();
+		String allData = new JSONArray(data).toString();
+		return Response.status(200).entity(allData).build();
+	}
+
+	@GET
 	@Path("countries")
 	@Produces("application/json")
 	public Response getAllCountries() throws Exception {
@@ -30,7 +39,7 @@ public class CountryService {
 		String countries = new JSONArray(listCountries).toString();
 		return Response.status(200).entity(countries).build();
 	}
-	
+
 	@POST
 	@Path("countriesname")
 	@Produces("application/json")

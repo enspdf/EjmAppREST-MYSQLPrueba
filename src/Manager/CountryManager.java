@@ -9,6 +9,8 @@ import Entities.Entity;
 
 public interface CountryManager {
 
+	List<Entity> getAllData() throws Exception;
+	
 	List<Country> getAllCountries() throws Exception;
 
 	List<Entity> getCountriesByName(Entity entity) throws Exception;
